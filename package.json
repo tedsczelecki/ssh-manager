@@ -1,0 +1,51 @@
+{
+  "name": "ssh-manager",
+  "version": "0.1.0",
+  "private": true,
+  "main": "electron.js",
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "dotenv": "^4.0.0",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "moment": "^2.19.1",
+    "node-osascript": "^2.0.0",
+    "node-sass-chokidar": "0.0.3",
+    "npm-run-all": "^4.1.1",
+    "prop-types": "^15.6.0",
+    "rc-progress": "^2.2.2",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-md": "^1.2.8",
+    "react-moment": "^0.6.5",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.6",
+    "react-scripts": "1.0.13",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
+    "webfontloader": "^1.6.28"
+  },
+  "scripts": {
+    "build": "npm run build-css && react-scripts build",
+    "build-css": "node-sass-chokidar --include-path ./node_modules src/ -o src/",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "lint": "eslint . -c ./.eslintrc --ignore-pattern node_modules/",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "test": "react-scripts test --env=jsdom",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node_modules src/ -o src/ --watch --recursive"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "electron": "^1.8.3",
+    "electron-debug": "^1.5.0",
+    "enzyme": "^2.9.1",
+    "enzyme-to-json": "^1.5.1",
+    "eslint-plugin-react": "^7.3.0",
+    "prettier": "^1.6.1",
+    "react-test-renderer": "^15.6.1"
+  }
+}

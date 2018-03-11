@@ -1,0 +1,5 @@
+@import './variables';
+
+@mixin container(){
+  padding: $gutter/2;
+}
