@@ -2,55 +2,86 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button } from 'react-md';
+import { Button, Paper } from 'react-md';
 
 import ElectronService from '../../services/electron';
+import { ConnectionList } from '../connection';
+import { connectionListShape } from '../../constants/shapes';
+import { connectionsOperations } from '../../modules/connections';
 
-const MainScreen = ( { onClick } ) => (
+const MainScreen = (
+  { connections,
+    onClick,
+    onConnectionEdit,
+    onConnectionDelete,
+  } ) => (
   <div className="app-screen__main">
-    <Button
-      raised
-      primary
-      onClick={onClick}
-    >
-      Open Terminal
-    </Button>
+    { connections.length === 0 ? (
+      <div className="app-screen__main__no-results">
+        No connections
+      </div>
+    ) : (
+      <div className="app-screen__main__list">
+        <span className="app-paper-title">Connections</span>
+        <Paper>
+          <ConnectionList
+            onDelete={onConnectionDelete}
+            onEdit={onConnectionEdit}
+            onItemClick={onClick}
+            list={connections}
+          />
+        </Paper>
+      </div>
+    )}
   </div>
 );
 
 MainScreen.propTypes = {
+  connections: connectionListShape,
   onClick: PropTypes.func,
+  onConnectionEdit: PropTypes.func,
+  onConnectionDelete: PropTypes.func,
 };
 
 MainScreen.defaultProps = {
+  connections: [],
   onClick: ()=>{},
+  onConnectionEdit: ()=>{},
+  onConnectionDelete: ()=>{},
 };
 
 class MainScreenContainer extends Component{
 
-  constructor(props){
-    super(props);
+  static propTypes = {
+    connections: connectionListShape,
+    onConnectionDelete: PropTypes.func,
+    onConnectionEdit: PropTypes.func,
+  };
 
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(){
-    ElectronService.openConnection();
-  }
+  static defaultProps = {
+    connections: [],
+    onConnectionDelete: ()=>{},
+    onConnectionEdit: ()=>{},
+  };
 
   render(){
     return (
-      <MainScreen onClick={this.handleClick} />
+      <MainScreen
+        connections={this.props.connections}
+        onClick={this.props.triggerConnection}
+        onConnectionDelete={this.props.onConnectionDelete}
+        onConnectionEdit={this.props.onConnectionEdit}
+      />
     );
   }
 }
 
 const mapStateToProps = state => ({
-  
+    connections: state.connections,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  
+  ...connectionsOperations,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreenContainer);

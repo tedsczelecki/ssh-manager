@@ -4,7 +4,7 @@ import { actions } from './actions';
 export const setSettings = payload => ( dispatch, getState ) => {
 
   ElectronService.saveData({
-    ...getState().connections || {},
+    ...getState(),
     settings: {
       ...payload,
     },

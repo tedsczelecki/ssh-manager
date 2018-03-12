@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button, Drawer, FontIcon, Toolbar } from 'react-md';
+import { Button, Drawer, Toolbar } from 'react-md';
 
+import { connectionShape } from '../../constants/shapes';
 import {
   MainScreen,
   NewConnectionScreen,
@@ -29,8 +30,13 @@ SettingsMenu.defaultProps = {
 };
 
 const App = (
-  { settingsVisible,
+  { activeConnection,
+    connectionScreenVisible,
+    settingsVisible,
     onSettingsSave,
+    onConnectionDelete,
+    onConnectionEdit,
+    onToggleNewConnection,
     onToggleSettings
   } ) => {
   return (
@@ -44,9 +50,20 @@ const App = (
           />
         }
         className="app-toolbar"
-        title="Connections"
       />
-      <MainScreen />
+      <MainScreen
+        onConnectionDelete={onConnectionDelete}
+        onConnectionEdit={onConnectionEdit}
+      />
+
+      <Button
+        primary
+        floating
+        className="app-wrapper__add-connection-btn"
+        onClick={onToggleNewConnection.bind(this, true)}
+      >
+        add
+      </Button>
 
       <Drawer
         header={null}
@@ -60,17 +77,33 @@ const App = (
           onSave={onSettingsSave}
         />
       </Drawer>
+      <NewConnectionScreen
+        values={activeConnection}
+        visible={connectionScreenVisible}
+        onClose={onToggleNewConnection.bind(this, false)}
+        onSave={onSettingsSave}
+      />
     </div>
   );
 };
 
 App.propTypes = {
+  activeConnection: connectionShape,
+  connectionScreenVisible: PropTypes.bool,
   settingsVisible: PropTypes.bool,
+  onConnectionDelete: PropTypes.func,
+  onConnectionEdit: PropTypes.func,
+  onToggleNewConnection: PropTypes.func,
   onToggleSettings: PropTypes.func,
 };
 
 App.defaultProps = {
+  activeConnection: null,
+  connectionScreenVisible: false,
   settingsVisible: false,
+  onConnectionDelete: ()=>{},
+  onConnectionEdit: ()=>{},
+  onToggleNewConnection: ()=>{},
   onToggleSettings: ()=>{},
 }
 
@@ -83,10 +116,33 @@ class AppContainer extends Component {
     super(props);
 
     this.state = {
+      activeConnection: null,
+      connectionScreenVisible: false,
       settingsVisible: false,
     };
 
     this.handleToggleSettings = this.handleToggleSettings.bind(this);
+    this.handleToggleNewConnection = this.handleToggleNewConnection.bind(this);
+    this.handleConnectionEdit = this.handleConnectionEdit.bind(this);
+    this.handleConnectionDelete = this.handleConnectionDelete.bind(this);
+  }
+
+  handleConnectionEdit(conn){
+    this.setState(() => ({
+      activeConnection: conn,
+      connectionScreenVisible: true,
+    }));
+  }
+
+  handleConnectionDelete(conn){
+    console.log('DELETE', conn);
+  }
+
+  handleToggleNewConnection(visibility = false){
+    this.setState(() => ({
+      connectionScreenVisible: visibility,
+      activeConnection: visibility ? this.state.activeConnection : null,
+    }));
   }
 
   handleToggleSettings(visibility = false){
@@ -98,7 +154,12 @@ class AppContainer extends Component {
   render() {
     return (
       <App
+        activeConnection={this.state.activeConnection}
+        connectionScreenVisible={this.state.connectionScreenVisible}
         settingsVisible={this.state.settingsVisible}
+        onConnectionEdit={this.handleConnectionEdit}
+        onConnectionDelete={this.handleConnectionDelete}
+        onToggleNewConnection={this.handleToggleNewConnection}
         onToggleSettings={this.handleToggleSettings}
       />
     );

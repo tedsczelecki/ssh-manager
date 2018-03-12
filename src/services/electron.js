@@ -16,6 +16,7 @@ class ElectronService{
   static getInitialState(callback = ()=>{}){
     ipcRenderer.send(Events.GET_INITIAL_DATA);
     ipcRenderer.on(Events.INITIAL_DATA, ( evt, data ) => {
+      console.log(data);
       const {settings, ...userData} = data;
       callback( {
         ...(userData || {}),
@@ -31,11 +32,12 @@ class ElectronService{
   }
 
   static saveData(data){
+    console.log('SAVING DATA', data);
     ipcRenderer.send(Events.SAVE_DATA, data);
   }
 
-  static openConnection(data = {}){
-    ipcRenderer.send(Events.OPEN_CONNECTION, data);
+  static openConnection(connection, settings){
+    ipcRenderer.send(Events.OPEN_CONNECTION, {connection, settings});
   }
 }
 
