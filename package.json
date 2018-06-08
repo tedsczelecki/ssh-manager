@@ -28,13 +28,13 @@
     "webfontloader": "^1.6.28"
   },
   "scripts": {
-    "build": "npm run build-css && react-scripts build",
+    "build:ui": "npm run build-css && react-scripts build",
     "build-css": "node-sass-chokidar --include-path ./node_modules src/ -o src/",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "lint": "eslint . -c ./.eslintrc --ignore-pattern node_modules/",
     "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
+    "start": "PORT=4000 npm-run-all -p watch-css start-js",
     "test": "react-scripts test --env=jsdom",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node_modules src/ -o src/ --watch --recursive"
   },
@@ -42,7 +42,9 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "electron": "^1.8.3",
+    "electron-builder": "^20.11.1",
     "electron-debug": "^1.5.0",
+    "electron-packager": "^11.1.0",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
     "eslint-plugin-react": "^7.3.0",

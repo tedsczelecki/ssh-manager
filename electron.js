@@ -9,7 +9,7 @@ const osascript = require('node-osascript');
 // require('electron-debug')({showDevTools:true});
 
 const dataFilePath = path.join(app.getPath('userData'), 'user-data.json');
-const terminalPath = 'tell application "Terminal" to do script "{{CMD}}"';
+const terminalPath = 'tell application "Terminal" to do script "{{CMD}}" activate';
 
 global.os = os;
 
@@ -34,7 +34,7 @@ function createWindow () {
   // Create the browser window.32
   window = new BrowserWindow({
     width: 400,
-    height: 600,
+    height: 500,
     show: false,
     frame: false,
     fullscreenable: false,
@@ -47,12 +47,15 @@ function createWindow () {
     }
   });
 
-  window.loadURL('http://localhost:3000');
+  window.loadURL('http://localhost:4000');
   // BrowserWindow.addDevToolsExtension('/Users/tedsczelecki/Library/Application Support/Google/Chrome/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.15.2_0');
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  // window.webContents.openDevTools()
 
+  window.on('blur', (  ) => {
+    window.hide();
+  })
   // Emitted when the window is closed.
   window.on('closed', function () {
     // Dereference the window object, usually you would store windows
@@ -63,8 +66,8 @@ function createWindow () {
 }
 
 ipcMain.on('show-window', () => {
-  showWindow()
-})
+  showWindow();
+});
 
 ipcMain.on(Events.GET_INITIAL_DATA, (  ) => {
   window.send(Events.INITIAL_DATA, getUserData());
@@ -111,9 +114,14 @@ function getUserData(){
 }
 
 function openConnection(evt, params){
-  const pem = params.connection.pemLocation || params.settings.defaultPemPath;
-  const command = `ssh -i ${pem} ${params.connection.user}@${params.connection.domain}`;
-  osascript.execute(terminalPath.replace('{{CMD}}', command), ( err ) => {
+  const pem = (params.connection.pemLocation || params.settings.defaultPemPath).trim();
+  const sshParams = `${params.connection.params} ${pem ? '-i' : '' }`;
+  const title = `echo -n -e '\\\\033]0;${params.connection.name}\\\\007'`;
+  const command = `ssh ${sshParams} ${pem} ${params.connection.user}@${params.connection.domain} && ${title}`;
+  osascript.execute(terminalPath.replace('{{CMD}}', command.replace(/"/g, '//')), ( err ) => {
+    if ( err ){
+      console.log(err);
+    }
     window.hide();
   });
 }

@@ -2,9 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, Paper } from 'react-md';
+import { Paper } from 'react-md';
 
-import ElectronService from '../../services/electron';
 import { ConnectionList } from '../connection';
 import { connectionListShape } from '../../constants/shapes';
 import { connectionsOperations } from '../../modules/connections';

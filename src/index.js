@@ -17,7 +17,6 @@ WebFontLoader.load({
 });
 
 ElectronService.getInitialState(( initialState ) => {
-  console.log('INITIAT', initialState);
   const store = storeWrapper(initialState);
 
   const target = document.querySelector('#root');

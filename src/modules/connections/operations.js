@@ -12,7 +12,6 @@ export const editConnection = payload => ( dispatch, getState ) => {
 };
 
 export const triggerConnection = conn => ( dispatch, getState ) => {
-  console.log('HEY', conn);
   const settings = getState().settings;
   ElectronService.openConnection(conn, settings);
 };

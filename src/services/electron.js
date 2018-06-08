@@ -32,7 +32,6 @@ class ElectronService{
   }
 
   static saveData(data){
-    console.log('SAVING DATA', data);
     ipcRenderer.send(Events.SAVE_DATA, data);
   }
 

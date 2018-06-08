@@ -2,11 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {
   Button,
-  FontIcon,
   List,
   ListItem,
   MenuButton,
-  Subheader
 } from 'react-md';
 
 import { connectionListShape } from '../../constants/shapes';
@@ -45,7 +43,7 @@ const ConnectionList = (
     onEdit,
     onItemClick
   } ) => (
-    <List className="app-connection-list">
+    <List className="app-connection-list app-content">
       { list.map(( conn, i ) => (
         <ListItem
           rightIcon={
@@ -65,7 +63,9 @@ const ConnectionList = (
             />
           }
           key={i}
-          primaryText={conn.name}
+          primaryText={
+            <span onClick={onEdit.bind(this, conn)}>{conn.name}</span>
+          }
           secondaryText={conn.team || null}
         />
       ))}

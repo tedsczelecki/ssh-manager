@@ -29,13 +29,14 @@ const NewConnectionScreen = (
 
   return (
     <div className={containerClass}>
+      <Toolbar
+        themed
+        actions={<Button icon onClick={onSave}>save</Button>}
+        className="app-new-connection-screen__header"
+        nav={<Button icon onClick={onClose}>close</Button>}
+        title={values.id ? 'Edit' : 'Create' }
+      />
       <div className="app-new-connection-screen__content">
-        <Toolbar
-          themed
-          actions={<Button icon onClick={onSave}>save</Button>}
-          nav={<Button icon onClick={onClose}>close</Button>}
-          title={values.id ? 'Edit' : 'Create' }
-        />
         <div className="app-new-connection-screen__form">
           <TextField
             id="app-connection-name"
@@ -149,7 +150,6 @@ class NewConnectionScreenContainer extends Component{
         values: !nextProps.values ? this.getDefaultConnection : nextProps.values,
       }));
     }
-    console.log('?', nextProps.visible); 
     if ( nextProps.visible ){
       setImmediate( (  ) => this.focusRef.focus());
     } else {
